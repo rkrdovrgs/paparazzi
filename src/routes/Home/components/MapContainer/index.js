@@ -2,6 +2,7 @@ import React from 'react';
 import {View} from 'native-base';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import styles from './MapContainerStyles';
+import SearchBox from '../SearchBox';
 
 export const MapContainer = ({region}) => {
   return (
@@ -9,6 +10,7 @@ export const MapContainer = ({region}) => {
       <MapView provider={PROVIDER_GOOGLE} style={styles.map} region={region}>
         <Marker coordinate={region} pinColor="green" />
       </MapView>
+      <SearchBox />
     </View>
   );
 };
