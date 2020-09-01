@@ -157,3 +157,6 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# Temp ignore
+ios/paparazzi/AppDelegate.m
