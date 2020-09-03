@@ -2,11 +2,17 @@ import update from 'react-addons-update';
 import constants from './actionConstants';
 import Geolocation from '@react-native-community/geolocation';
 import {Dimensions} from 'react-native';
+import RNGooglePlaces from 'react-native-google-places';
 
 //--------------------
 // Constants
 //--------------------
-const {GET_CURRENT_LOCATION, GET_INPUT, TOGGLE_SEARCH_RESULT} = constants;
+const {
+  GET_CURRENT_LOCATION,
+  GET_INPUT,
+  TOGGLE_SEARCH_RESULT,
+  GET_ADDRESS_PREDICTIONS,
+} = constants;
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -43,6 +49,25 @@ export function toggleSearchResultModal(payload) {
   return {
     type: TOGGLE_SEARCH_RESULT,
     payload,
+  };
+}
+
+export function getAddressPredictions() {
+  return (dispatch, store) => {
+    let userInput = store().home.resultTypes.pickUp
+      ? store().home.inputData.pickUp
+      : store().home.inputData.dropOff;
+
+    RNGooglePlaces.getAutocompletePredictions(userInput, {
+      country: 'US',
+    })
+      .then((results) =>
+        dispatch({
+          type: GET_ADDRESS_PREDICTIONS,
+          payload: results,
+        }),
+      )
+      .catch((error) => console.error(error));
   };
 }
 
@@ -83,6 +108,9 @@ function handleToggleSearchResult(state, action) {
             $set: false,
           },
         },
+        predictions: {
+          $set: [],
+        },
       });
     case 'dropOff':
       return update(state, {
@@ -94,14 +122,26 @@ function handleToggleSearchResult(state, action) {
             $set: true,
           },
         },
+        predictions: {
+          $set: [],
+        },
       });
   }
+}
+
+function handleGetAddressPredictions(state, action) {
+  return update(state, {
+    predictions: {
+      $set: action.payload,
+    },
+  });
 }
 
 const ACTION_HANDLERS = {
   GET_CURRENT_LOCATION: handleGetCurrentLocation,
   GET_INPUT: handleGetInputData,
   TOGGLE_SEARCH_RESULT: handleToggleSearchResult,
+  GET_ADDRESS_PREDICTIONS: handleGetAddressPredictions,
 };
 const initialState = {
   region: {},
@@ -110,6 +150,7 @@ const initialState = {
     pickUp: false,
     dropOff: false,
   },
+  predictions: [],
 };
 
 export function HomeReducer(state = initialState, action) {

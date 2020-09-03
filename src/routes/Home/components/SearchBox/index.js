@@ -4,9 +4,14 @@ import {View, InputGroup, Input} from 'native-base';
 import styles from './SearchBoxStyles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export const SearchBox = ({getInputData, toggleSearchResultModal}) => {
+export const SearchBox = ({
+  getInputData,
+  toggleSearchResultModal,
+  getAddressPredictions,
+}) => {
   const handleInput = (key, value) => {
     getInputData({key, value});
+    getAddressPredictions();
   };
 
   return (
