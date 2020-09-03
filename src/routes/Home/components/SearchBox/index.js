@@ -4,7 +4,11 @@ import {View, InputGroup, Input} from 'native-base';
 import styles from './SearchBoxStyles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export const SearchBox = () => {
+export const SearchBox = ({getInputData, toggleSearchResultModal}) => {
+  const handleInput = (key, value) => {
+    getInputData({key, value});
+  };
+
   return (
     <View style={styles.searchBox}>
       <View style={styles.inputWrapper}>
@@ -14,6 +18,8 @@ export const SearchBox = () => {
           <Input
             style={styles.inputSearch}
             placeholder="Choose pick-up location"
+            onFocus={() => toggleSearchResultModal('pickUp')}
+            onChangeText={handleInput.bind(this, 'pickUp')}
           />
         </InputGroup>
       </View>
@@ -25,6 +31,8 @@ export const SearchBox = () => {
           <Input
             style={styles.inputSearch}
             placeholder="Choose drop-up location"
+            onFocus={() => toggleSearchResultModal('dropOff')}
+            onChangeText={handleInput.bind(this, 'dropOff')}
           />
         </InputGroup>
       </View>
