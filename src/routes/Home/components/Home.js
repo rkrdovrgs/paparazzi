@@ -2,6 +2,7 @@ import React from 'react';
 import MapContainer from './MapContainer';
 import {Container} from 'native-base';
 import HeaderComponent from '../../../components/HeaderComponent';
+import FooterComponent from '../../../components/FooterComponent';
 
 const taxiLogo = require('../../../assets/img/logo.png');
 
@@ -26,6 +27,7 @@ export default class Home extends React.Component {
         ) : (
           <></>
         )}
+        <FooterComponent />
       </Container>
     );
   }
